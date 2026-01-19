@@ -26,7 +26,7 @@ function RouteComponent() {
 
   const handleSetActiveClan = (tag: string) => {
     try {
-      router.history.push(`/wars/${encodeURIComponent(tag)}`);
+      router.history.push(`/wars/${tag.replace("#", "")}`);
     } catch (error) {
       console.error("Erro ao definir clã ativo:", error);
     }

@@ -11,7 +11,7 @@ const clanStatsQueryOptions = (clanTag: string) =>
     queryKey: ["clan-stats", clanTag],
     queryFn: () =>
       apiFetch(
-        `${import.meta.env.VITE_API_URL}/clans/clan-info?clanTag=${encodeURIComponent(clanTag)}`,
+        `${import.meta.env.VITE_API_URL}/clans/clan-info?clanTag=${encodeURIComponent("#" + clanTag)}`,
       ),
   });
 
@@ -20,7 +20,7 @@ const clanWarsQueryOptions = (clanTag: string) =>
     queryKey: ["clan-wars", clanTag],
     queryFn: () =>
       apiFetch(
-        `${import.meta.env.VITE_API_URL}/dashboard/data?clanTag=${encodeURIComponent(clanTag)}`,
+        `${import.meta.env.VITE_API_URL}/dashboard/data?clanTag=${encodeURIComponent("#" + clanTag)}`,
       ),
   });
 

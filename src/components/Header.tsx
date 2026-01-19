@@ -163,7 +163,7 @@ export function Header({ user, userClans }: HeaderProps) {
                                 <Link
                                   key={clan.tag}
                                   to={
-                                    `${item.url}/${encodeURIComponent(clan.tag)}` as any
+                                    `${item.url}/${clan.tag.replace("#", "")}` as any
                                   }
                                   className="flex flex-col rounded-lg hover:bg-primary/2 p-4"
                                 >
@@ -338,7 +338,7 @@ export function Header({ user, userClans }: HeaderProps) {
                                 <Link
                                   to={clan.tag}
                                   preload="intent"
-                                  href={`${option.url}/${encodeURIComponent(clan.tag)}`}
+                                  href={`${option.url}/${clan.tag.replace("#", " ")}`}
                                   onClick={() => setIsMobileOpen(false)}
                                   className="py-2 text-sm text-muted-foreground hover:text-primary transition-colors"
                                 >
