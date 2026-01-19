@@ -338,10 +338,7 @@ export function Header({ user, userClans }: HeaderProps) {
                                 <Link
                                   to={clan.tag}
                                   preload="intent"
-                                  href={`${option.url}/${clan.tag.replace(
-                                    "#",
-                                    "",
-                                  )}`}
+                                  href={`${option.url}/${encodeURIComponent(clan.tag)}`}
                                   onClick={() => setIsMobileOpen(false)}
                                   className="py-2 text-sm text-muted-foreground hover:text-primary transition-colors"
                                 >
