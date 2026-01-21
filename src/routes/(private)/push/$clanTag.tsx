@@ -12,7 +12,7 @@ const pushQueryOptions = (clanTag: string) =>
     queryKey: ["push", clanTag],
     queryFn: () =>
       apiFetch(
-        `${import.meta.env.VITE_API_URL}/legend-logs/clan/${encodeURIComponent(`#` + clanTag)}`,
+        `${import.meta.env.VITE_API_URL}/legend-logs/clan?clanTag=${encodeURIComponent(`#` + clanTag)}`,
       ),
   });
 
