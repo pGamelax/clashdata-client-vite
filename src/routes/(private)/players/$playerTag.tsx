@@ -39,13 +39,11 @@ const playerPushLogsQueryOptions = (playerTag: string) =>
     queryFn: async () => {
       // Remover # se existir - o backend adiciona internamente
       const cleanTag = playerTag.replace("#", "").trim();
-      const teste =  await apiFetch(
+      return apiFetch(
         `${import.meta.env.VITE_API_URL}/legend-logs/player?playerTag=${encodeURIComponent(cleanTag)}`,
       );
 
-      console.log(teste);
-
-      return teste
+      
     },
   });
 
