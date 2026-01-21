@@ -18,7 +18,7 @@ const playerInfoQueryOptions = (playerTag: string) =>
     queryKey: ["player-info", playerTag],
     queryFn: async () => {
       const response = await apiFetch(
-        `${import.meta.env.VITE_API_URL}/players/${encodeURIComponent("#" + playerTag)}`,
+        `${import.meta.env.VITE_API_URL}/players/info?playerTag=${encodeURIComponent("#" + playerTag)}`,
       );
       return response as PlayerInfo;
     },
@@ -29,7 +29,7 @@ const playerWarHistoryQueryOptions = (playerTag: string) =>
     queryKey: ["player-war-history", playerTag],
     queryFn: async () =>
       apiFetch(
-        `${import.meta.env.VITE_API_URL}/players/war-history/${encodeURIComponent("#" + playerTag)}`,
+        `${import.meta.env.VITE_API_URL}/players/war-history?playerTag=${encodeURIComponent("#" + playerTag)}`,
       ),
   });
 
