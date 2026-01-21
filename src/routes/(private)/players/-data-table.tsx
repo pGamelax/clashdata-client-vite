@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import {
   type ColumnDef,
-  flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
@@ -22,7 +21,7 @@ import { Bomb, ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { columns, type ClanWar, type WarAttack } from "./-columns";
 import type { RawWarItem, WarHistorySectionProps } from "./-types";
 
-export function WarHistorySection({ rawData, playerTag, playerClanTag }: WarHistorySectionProps) {
+export function WarHistorySection({ rawData, playerClanTag }: WarHistorySectionProps) {
   const formatWarData = (items: RawWarItem[]): ClanWar[] => {
     return items.map((item) => {
       const clanTag = item.war_data.clan.tag;

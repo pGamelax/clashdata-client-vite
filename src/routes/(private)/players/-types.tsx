@@ -105,6 +105,5 @@ export interface RawData {
 
 export interface WarHistorySectionProps {
   rawData: RawData;
-  playerTag: string;
   playerClanTag?: string;
 }

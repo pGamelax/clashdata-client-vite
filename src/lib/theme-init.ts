@@ -3,7 +3,7 @@
  * This script runs early to set CSS custom properties based on VITE_PRIMARY_COLOR
  */
 
-import { getPrimaryColor, generateColorVariants } from './theme-utils';
+import { getPrimaryColor } from './theme-utils';
 
 /**
  * Initialize theme colors on page load
@@ -13,7 +13,6 @@ export function initTheme() {
 
   const root = document.documentElement;
   const primaryColor = getPrimaryColor();
-  const variants = generateColorVariants(primaryColor);
 
   // Set primary color and variants as OKLCH
   root.style.setProperty('--primary', primaryColor);

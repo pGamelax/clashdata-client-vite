@@ -272,7 +272,6 @@ function RouteComponent() {
             <div className="bg-card border border-border rounded-xl p-4 sm:p-5 lg:p-6">
               <WarHistorySection 
                 rawData={playerWarHistory} 
-                playerTag={playerInfo.tag}
                 playerClanTag={playerInfo.clan?.tag}
               />
             </div>
