@@ -11,6 +11,7 @@ import {
 import type { ProcessedPlayer } from "./-types"
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Link } from "@tanstack/react-router";
 
 const SortButton = ({ column, label }: { column: any; label: string }) => {
   const isSorted = column.getIsSorted();
@@ -48,16 +49,24 @@ export const columns: ColumnDef<ProcessedPlayer>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => <SortButton column={column} label="JOGADOR" />,
-    cell: ({ row }) => (
-      <div className="flex flex-col text-base">
-        <span className="font-semibold tracking-tight">
-          {row.original.name}
-        </span>
-        <span className=" text-muted-foreground font-mono">
-          {row.original.tag}
-        </span>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const playerTag = row.original.tag.replace("#", "");
+      return (
+        <Link
+          to="/players/$playerTag"
+          params={{ playerTag }}
+          search={{ error: undefined }}
+          className="flex flex-col text-base hover:text-primary transition-colors cursor-pointer"
+        >
+          <span className="font-semibold tracking-tight">
+            {row.original.name}
+          </span>
+          <span className=" text-muted-foreground font-mono">
+            {row.original.tag}
+          </span>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "performanceScore",
@@ -78,7 +87,7 @@ export const columns: ColumnDef<ProcessedPlayer>[] = [
           <div className="h-1.5 w-full bg-slate-100 dark:bg-zinc-800 rounded-full overflow-hidden">
             <div
               className={`h-full transition-all ${
-                progress > 80 ? "bg-emerald-500" : "bg-primary"
+                progress > 80 ? "bg-primary" : "bg-primary"
               }`}
               style={{ width: `${progress}%` }}
             />

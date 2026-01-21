@@ -12,10 +12,14 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as privateRouteRouteImport } from './routes/(private)/route'
 import { Route as homeRouteRouteImport } from './routes/(home)/route'
 import { Route as homeIndexRouteImport } from './routes/(home)/index'
+import { Route as privatePlayersRouteRouteImport } from './routes/(private)/players/route'
 import { Route as publicSignUpIndexRouteImport } from './routes/(public)/sign-up/index'
 import { Route as publicSignInIndexRouteImport } from './routes/(public)/sign-in/index'
+import { Route as privatePlayersIndexRouteImport } from './routes/(private)/players/index'
 import { Route as privateClansIndexRouteImport } from './routes/(private)/clans/index'
 import { Route as privateWarsClanTagRouteImport } from './routes/(private)/wars/$clanTag'
+import { Route as privatePushClanTagRouteImport } from './routes/(private)/push/$clanTag'
+import { Route as privatePlayersPlayerTagRouteImport } from './routes/(private)/players/$playerTag'
 
 const privateRouteRoute = privateRouteRouteImport.update({
   id: '/(private)',
@@ -30,6 +34,11 @@ const homeIndexRoute = homeIndexRouteImport.update({
   path: '/',
   getParentRoute: () => homeRouteRoute,
 } as any)
+const privatePlayersRouteRoute = privatePlayersRouteRouteImport.update({
+  id: '/players',
+  path: '/players',
+  getParentRoute: () => privateRouteRoute,
+} as any)
 const publicSignUpIndexRoute = publicSignUpIndexRouteImport.update({
   id: '/(public)/sign-up/',
   path: '/sign-up/',
@@ -39,6 +48,11 @@ const publicSignInIndexRoute = publicSignInIndexRouteImport.update({
   id: '/(public)/sign-in/',
   path: '/sign-in/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const privatePlayersIndexRoute = privatePlayersIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => privatePlayersRouteRoute,
 } as any)
 const privateClansIndexRoute = privateClansIndexRouteImport.update({
   id: '/clans/',
@@ -50,18 +64,35 @@ const privateWarsClanTagRoute = privateWarsClanTagRouteImport.update({
   path: '/wars/$clanTag',
   getParentRoute: () => privateRouteRoute,
 } as any)
+const privatePushClanTagRoute = privatePushClanTagRouteImport.update({
+  id: '/push/$clanTag',
+  path: '/push/$clanTag',
+  getParentRoute: () => privateRouteRoute,
+} as any)
+const privatePlayersPlayerTagRoute = privatePlayersPlayerTagRouteImport.update({
+  id: '/$playerTag',
+  path: '/$playerTag',
+  getParentRoute: () => privatePlayersRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
+  '/players': typeof privatePlayersRouteRouteWithChildren
   '/': typeof homeIndexRoute
+  '/players/$playerTag': typeof privatePlayersPlayerTagRoute
+  '/push/$clanTag': typeof privatePushClanTagRoute
   '/wars/$clanTag': typeof privateWarsClanTagRoute
   '/clans': typeof privateClansIndexRoute
+  '/players/': typeof privatePlayersIndexRoute
   '/sign-in': typeof publicSignInIndexRoute
   '/sign-up': typeof publicSignUpIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof homeIndexRoute
+  '/players/$playerTag': typeof privatePlayersPlayerTagRoute
+  '/push/$clanTag': typeof privatePushClanTagRoute
   '/wars/$clanTag': typeof privateWarsClanTagRoute
   '/clans': typeof privateClansIndexRoute
+  '/players': typeof privatePlayersIndexRoute
   '/sign-in': typeof publicSignInIndexRoute
   '/sign-up': typeof publicSignUpIndexRoute
 }
@@ -69,24 +100,49 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(home)': typeof homeRouteRouteWithChildren
   '/(private)': typeof privateRouteRouteWithChildren
+  '/(private)/players': typeof privatePlayersRouteRouteWithChildren
   '/(home)/': typeof homeIndexRoute
+  '/(private)/players/$playerTag': typeof privatePlayersPlayerTagRoute
+  '/(private)/push/$clanTag': typeof privatePushClanTagRoute
   '/(private)/wars/$clanTag': typeof privateWarsClanTagRoute
   '/(private)/clans/': typeof privateClansIndexRoute
+  '/(private)/players/': typeof privatePlayersIndexRoute
   '/(public)/sign-in/': typeof publicSignInIndexRoute
   '/(public)/sign-up/': typeof publicSignUpIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/wars/$clanTag' | '/clans' | '/sign-in' | '/sign-up'
+  fullPaths:
+    | '/players'
+    | '/'
+    | '/players/$playerTag'
+    | '/push/$clanTag'
+    | '/wars/$clanTag'
+    | '/clans'
+    | '/players/'
+    | '/sign-in'
+    | '/sign-up'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/wars/$clanTag' | '/clans' | '/sign-in' | '/sign-up'
+  to:
+    | '/'
+    | '/players/$playerTag'
+    | '/push/$clanTag'
+    | '/wars/$clanTag'
+    | '/clans'
+    | '/players'
+    | '/sign-in'
+    | '/sign-up'
   id:
     | '__root__'
     | '/(home)'
     | '/(private)'
+    | '/(private)/players'
     | '/(home)/'
+    | '/(private)/players/$playerTag'
+    | '/(private)/push/$clanTag'
     | '/(private)/wars/$clanTag'
     | '/(private)/clans/'
+    | '/(private)/players/'
     | '/(public)/sign-in/'
     | '/(public)/sign-up/'
   fileRoutesById: FileRoutesById
@@ -121,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof homeIndexRouteImport
       parentRoute: typeof homeRouteRoute
     }
+    '/(private)/players': {
+      id: '/(private)/players'
+      path: '/players'
+      fullPath: '/players'
+      preLoaderRoute: typeof privatePlayersRouteRouteImport
+      parentRoute: typeof privateRouteRoute
+    }
     '/(public)/sign-up/': {
       id: '/(public)/sign-up/'
       path: '/sign-up'
@@ -135,6 +198,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publicSignInIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(private)/players/': {
+      id: '/(private)/players/'
+      path: '/'
+      fullPath: '/players/'
+      preLoaderRoute: typeof privatePlayersIndexRouteImport
+      parentRoute: typeof privatePlayersRouteRoute
+    }
     '/(private)/clans/': {
       id: '/(private)/clans/'
       path: '/clans'
@@ -148,6 +218,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/wars/$clanTag'
       preLoaderRoute: typeof privateWarsClanTagRouteImport
       parentRoute: typeof privateRouteRoute
+    }
+    '/(private)/push/$clanTag': {
+      id: '/(private)/push/$clanTag'
+      path: '/push/$clanTag'
+      fullPath: '/push/$clanTag'
+      preLoaderRoute: typeof privatePushClanTagRouteImport
+      parentRoute: typeof privateRouteRoute
+    }
+    '/(private)/players/$playerTag': {
+      id: '/(private)/players/$playerTag'
+      path: '/$playerTag'
+      fullPath: '/players/$playerTag'
+      preLoaderRoute: typeof privatePlayersPlayerTagRouteImport
+      parentRoute: typeof privatePlayersRouteRoute
     }
   }
 }
@@ -164,12 +248,29 @@ const homeRouteRouteWithChildren = homeRouteRoute._addFileChildren(
   homeRouteRouteChildren,
 )
 
+interface privatePlayersRouteRouteChildren {
+  privatePlayersPlayerTagRoute: typeof privatePlayersPlayerTagRoute
+  privatePlayersIndexRoute: typeof privatePlayersIndexRoute
+}
+
+const privatePlayersRouteRouteChildren: privatePlayersRouteRouteChildren = {
+  privatePlayersPlayerTagRoute: privatePlayersPlayerTagRoute,
+  privatePlayersIndexRoute: privatePlayersIndexRoute,
+}
+
+const privatePlayersRouteRouteWithChildren =
+  privatePlayersRouteRoute._addFileChildren(privatePlayersRouteRouteChildren)
+
 interface privateRouteRouteChildren {
+  privatePlayersRouteRoute: typeof privatePlayersRouteRouteWithChildren
+  privatePushClanTagRoute: typeof privatePushClanTagRoute
   privateWarsClanTagRoute: typeof privateWarsClanTagRoute
   privateClansIndexRoute: typeof privateClansIndexRoute
 }
 
 const privateRouteRouteChildren: privateRouteRouteChildren = {
+  privatePlayersRouteRoute: privatePlayersRouteRouteWithChildren,
+  privatePushClanTagRoute: privatePushClanTagRoute,
   privateWarsClanTagRoute: privateWarsClanTagRoute,
   privateClansIndexRoute: privateClansIndexRoute,
 }

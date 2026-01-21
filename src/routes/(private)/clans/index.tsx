@@ -1,8 +1,8 @@
-import { ChevronRight, LayoutGrid } from "lucide-react";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { ChevronRight, LayoutGrid, XCircle } from "lucide-react";
+import { createFileRoute, useRouter, useNavigate } from "@tanstack/react-router";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const clansQueryOptions = queryOptions({
   queryKey: ["my-clans"],
@@ -10,10 +10,17 @@ const clansQueryOptions = queryOptions({
 });
 
 export const Route = createFileRoute("/(private)/clans/")({
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      error: (search.error as string) || undefined,
+    };
+  },
   loader: async ({ context: { queryClient } }) => {
     try {
       await Promise.all([queryClient.ensureQueryData(clansQueryOptions)]);
-    } catch (error) {}
+    } catch (error) {
+      // Erros são tratados no componente
+    }
   },
 
   component: RouteComponent,
@@ -23,6 +30,21 @@ function RouteComponent() {
   const { data: clans } = useQuery(clansQueryOptions);
   const isEmpty = clans.length === 0;
   const router = useRouter();
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { error: routeError } = Route.useSearch();
+
+  // Exibe erro da rota (vindo de redirects)
+  useEffect(() => {
+    if (routeError) {
+      setErrorMessage(routeError);
+      // Limpa a mensagem de erro da URL após exibir
+      navigate({ 
+        to: "/clans",
+        search: { error: undefined } 
+      });
+    }
+  }, [routeError, navigate]);
 
   const handleSetActiveClan = (tag: string) => {
     try {
@@ -37,50 +59,63 @@ function RouteComponent() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#09090b] p-4 lg:p-8 text-slate-900 dark:text-zinc-100">
-      <div className="container mx-auto space-y-8">
-        <header className="flex flex-row items-center justify-between px-2">
-          <div className="space-y-1">
-            <h1 className="text-2xl font-extrabold tracking-tight lg:text-4xl">
-              Meus clans
-            </h1>
+    <div className="min-h-screen bg-background">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 lg:py-8 space-y-4 sm:space-y-6">
+        {/* Error Message */}
+        {errorMessage && (
+          <div className="flex items-center gap-2 text-destructive bg-destructive/10 border border-destructive/20 p-3 rounded-lg">
+            <XCircle size={16} className="flex-shrink-0" />
+            <span className="text-sm font-medium">{errorMessage}</span>
           </div>
+        )}
+
+        {/* Header */}
+        <header className="space-y-1">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight text-foreground">
+            Meus Clans
+          </h1>
+          <p className="text-xs sm:text-sm text-muted-foreground">
+            Gerencie e monitore todos os seus clans
+          </p>
         </header>
 
+        {/* Empty State */}
         {isEmpty ? (
-          <div className="flex flex-col items-center justify-center min-h-100 rounded-3xl border-2 border-dashed border-slate-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/20 p-12 text-center animate-in fade-in zoom-in duration-500">
-            <div className="p-4 rounded-full bg-slate-100 dark:bg-zinc-800 mb-6">
-              <LayoutGrid size={48} className="text-muted-foreground/40" />
+          <div className="flex flex-col items-center justify-center min-h-[300px] sm:min-h-[400px] rounded-xl border border-dashed border-border bg-card p-8 sm:p-12 text-center">
+            <div className="p-4 rounded-lg bg-muted border border-border mb-4 sm:mb-6">
+              <LayoutGrid size={32} className="sm:w-12 sm:h-12 text-muted-foreground/40" />
             </div>
-            <h2 className="text-2xl font-bold tracking-tight">
+            <h2 className="text-lg sm:text-xl font-semibold tracking-tight mb-2">
               Nenhum clã encontrado
             </h2>
-            <p className="text-muted-foreground max-w-sm mt-2 mb-8">
+            <p className="text-sm text-muted-foreground max-w-sm mt-2">
               Você ainda não vinculou nenhum clã à sua conta do ClashData para
               monitorar estatísticas.
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          /* Clans Grid */
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {clans.map((clan: any) => (
               <div
                 key={clan.tag}
                 onClick={() => handleSetActiveClan(clan.tag)}
-                className="group relative flex flex-col rounded-3xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 hover:dark:bg-zinc-900 transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden p-6 space-y-4 "
+                className="bg-card border border-border rounded-xl p-4 sm:p-5 cursor-pointer hover:bg-muted/50 transition-colors"
               >
-                <div className="flex items-center gap-4">
-                  <div className="space-y-2">
-                    <h2 className="text-xl font-bold truncate group-hover:text-primary transition-colors">
+                <div className="space-y-3">
+                  <div className="space-y-1.5">
+                    <h2 className="text-base sm:text-lg lg:text-xl font-semibold truncate text-foreground">
                       {clan.name}
                     </h2>
-                    <p className="text-xs font-mono text-muted-foreground">
+                    <p className="text-xs font-mono text-muted-foreground truncate">
                       {clan.tag}
                     </p>
                   </div>
-                </div>
 
-                <div className="flex items-center justify-end text-xs font-bold text-primary transition-all">
-                  DASHBOARD <ChevronRight size={14} />
+                  <div className="flex items-center justify-end gap-1.5 text-xs sm:text-sm font-medium text-primary pt-2 border-t border-border">
+                    <span>Dashboard</span>
+                    <ChevronRight size={14} className="sm:w-4 sm:h-4" />
+                  </div>
                 </div>
               </div>
             ))}

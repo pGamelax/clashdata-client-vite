@@ -169,7 +169,7 @@ export function DataTable({ columns, data }: DataTableProps) {
               placeholder="Buscar jogador..."
               value={globalFilter}
               onChange={(e) => setGlobalFilter(e.target.value)}
-              className="pl-9 h-10 rounded-xl border-slate-200 dark:border-zinc-800 bg-background focus-visible:ring-1"
+              className="pl-9 h-11 rounded-xl border-2 border-border/50 bg-muted/30 backdrop-blur-sm focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0 transition-all"
             />
           </div>
 
@@ -183,10 +183,10 @@ export function DataTable({ columns, data }: DataTableProps) {
               value={String(warLimit)}
               onValueChange={(value) => setWarLimit(Number(value))}
             >
-              <SelectTrigger className="w-full h-10 pl-10 pr-3 rounded-xl border-slate-200 dark:border-zinc-800 bg-background focus:ring-1 focus:ring-offset-0">
+              <SelectTrigger className="w-full h-11 pl-10 pr-3 rounded-xl border-2 border-border/50 bg-muted/30 backdrop-blur-sm focus:ring-2 focus:ring-primary focus:ring-offset-0 transition-all">
                 <SelectValue placeholder="Guerras" />
               </SelectTrigger>
-              <SelectContent className="rounded-xl border-slate-200 dark:border-zinc-800">
+              <SelectContent className="rounded-xl border-2 border-border/50 bg-card/95 backdrop-blur-xl shadow-xl">
                 <SelectItem value="5">Últimas 5</SelectItem>
                 <SelectItem value="10">Últimas 10</SelectItem>
                 <SelectItem value="15">Últimas 15</SelectItem>
@@ -201,10 +201,10 @@ export function DataTable({ columns, data }: DataTableProps) {
         {table.getRowModel().rows.map((row) => (
           <div
             key={row.id}
-            className="rounded-xl border bg-white dark:bg-zinc-900/50 shadow-sm overflow-hidden"
+            className="rounded-xl border-2 border-border/50 bg-card/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all overflow-hidden"
           >
             <div
-              className="p-3 space-y-4 cursor-pointer"
+              className="p-4 space-y-4 cursor-pointer"
               onClick={() =>
                 setExpandedRows((v) => ({ ...v, [row.id]: !v[row.id] }))
               }
@@ -221,7 +221,7 @@ export function DataTable({ columns, data }: DataTableProps) {
                   )}
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-100 dark:border-zinc-800">
+              <div className="grid grid-cols-2 gap-4 pt-3 border-t-2 border-border/50">
                 <div className="space-y-1">
                   <p className="text-muted-foreground text-sm font-semibold">
                     Media de ataque
@@ -251,11 +251,11 @@ export function DataTable({ columns, data }: DataTableProps) {
             </div>
 
             {expandedRows[row.id] && (
-              <div className="p-3 bg-slate-50/50 dark:bg-zinc-950/30 border-t space-y-2">
+              <div className="p-4 bg-muted/20 border-t-2 border-border/50 space-y-3">
                 {row.original.displayAttacks.map((att, i) => (
                   <div
                     key={i}
-                    className="p-3 rounded-xl bg-white dark:bg-zinc-900 border border-border/50 shadow-sm"
+                    className="p-4 rounded-xl bg-card/80 backdrop-blur-sm border-2 border-border/50 shadow-md hover:shadow-lg transition-all"
                   >
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm font-bold uppercase text-muted-foreground">
@@ -295,15 +295,15 @@ export function DataTable({ columns, data }: DataTableProps) {
         ))}
       </div>
 
-      <div className="hidden md:block rounded-xl border bg-white dark:bg-zinc-900/50 shadow-sm overflow-x-auto">
+      <div className="hidden md:block rounded-xl border-2 border-border/50 bg-card/80 backdrop-blur-sm shadow-xl overflow-x-auto">
         <Table>
-          <TableHeader className="bg-slate-50 dark:bg-zinc-800/50">
+          <TableHeader className="bg-muted/30 backdrop-blur-sm border-b-2 border-border/50">
             {table.getHeaderGroups().map((hg) => (
-              <TableRow key={hg.id} className="border-none">
+              <TableRow key={hg.id} className="border-none hover:bg-transparent">
                 {hg.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className="uppercase py-4 first:pl-6 last:pr-6"
+                    className="uppercase py-4 first:pl-6 last:pr-6 text-xs font-black tracking-widest text-muted-foreground"
                   >
                     {flexRender(
                       header.column.columnDef.header,
@@ -318,7 +318,7 @@ export function DataTable({ columns, data }: DataTableProps) {
             {table.getRowModel().rows.map((row) => (
               <React.Fragment key={row.id}>
                 <TableRow
-                  className="cursor-pointer hover:bg-slate-50/50 dark:hover:bg-zinc-800/20 transition-colors"
+                  className="cursor-pointer hover:bg-muted/20 transition-colors border-b border-border/30 group"
                   onClick={() =>
                     setExpandedRows((v) => ({ ...v, [row.id]: !v[row.id] }))
                   }
@@ -326,7 +326,7 @@ export function DataTable({ columns, data }: DataTableProps) {
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className="py-3 first:pl-6 last:pr-6"
+                      className="py-4 first:pl-6 last:pr-6 group-hover:text-foreground transition-colors"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -336,13 +336,13 @@ export function DataTable({ columns, data }: DataTableProps) {
                   ))}
                 </TableRow>
                 {expandedRows[row.id] && (
-                  <TableRow className="bg-slate-50/30 dark:bg-zinc-950/30 border-none">
+                  <TableRow className="bg-muted/10 border-none">
                     <TableCell colSpan={columns.length} className="p-6">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         {row.original.displayAttacks.map((att, i) => (
                           <div
                             key={i}
-                            className="p-3 rounded-xl bg-white dark:bg-zinc-900 border border-border/50 shadow-sm"
+                            className="p-4 rounded-xl bg-card/80 backdrop-blur-sm border-2 border-border/50 shadow-md hover:shadow-lg transition-all"
                           >
                             <div className="flex justify-between items-center mb-2">
                               <span className="text-sm font-bold uppercase text-muted-foreground">
@@ -387,23 +387,31 @@ export function DataTable({ columns, data }: DataTableProps) {
         </Table>
       </div>
 
-      <div className="flex gap-2 justify-between flex-row w-full px-2 sm:px-0">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Anterior
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Próximo
-        </Button>
+      <div className="flex items-center justify-between flex-row w-full px-2 sm:px-0 py-4">
+        <p className="text-sm text-muted-foreground font-medium">
+          Página <span className="font-bold text-foreground">{table.getState().pagination.pageIndex + 1}</span> de{" "}
+          <span className="font-bold text-foreground">{table.getPageCount()}</span>
+        </p>
+        <div className="flex gap-3">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+            className="rounded-xl border-2 shadow-md hover:shadow-lg transition-all"
+          >
+            Anterior
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+            className="rounded-xl border-2 shadow-md hover:shadow-lg transition-all"
+          >
+            Próximo
+          </Button>
+        </div>
       </div>
     </div>
   );

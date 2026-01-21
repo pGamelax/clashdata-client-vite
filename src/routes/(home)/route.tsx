@@ -23,9 +23,7 @@ export const Route = createFileRoute("/(home)")({
       ]);
     } catch (error: any) {}
   },
-  beforeLoad: () => {
-    document.title = "Clashdata | Inicio";
-  },
+ 
   component: RouteComponent,
 });
 

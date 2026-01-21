@@ -52,17 +52,17 @@ export function SignUp() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-svh bg-slate-50/50 dark:bg-[#09090b]">
-      <div className="w-full max-w-100 px-6 flex flex-col items-center gap-8">
-     
-        <Link to={"/"} className="flex flex-col items-center gap-2">
-          <div className="text-primary transition-transform group-hover:scale-110 duration-200">
+    <div className="flex flex-col justify-center items-center min-h-svh bg-background relative overflow-hidden">
+      <div className="relative w-full max-w-100 px-6 flex flex-col items-center gap-8">
+        <Link to={"/"} className="flex flex-col items-center gap-3 group">
+          <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 border-2 border-primary/20 shadow-lg group-hover:scale-110 transition-transform duration-300">
             <svg
               width="32"
               height="32"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              className="text-primary"
             >
               <path
                 d="M4 10V19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V10"
@@ -102,18 +102,17 @@ export function SignUp() {
               />
             </svg>
           </div>
-          <h1 className="text-xl font-black tracking-tighter sm:text-2xl">
+          <h1 className="text-2xl font-black tracking-tighter sm:text-3xl text-foreground">
             CLASH<span className="text-primary">DATA</span>
           </h1>
         </Link>
 
-   
-        <div className="w-full p-8 bg-white dark:bg-zinc-900/50 backdrop-blur-xl rounded-4xl border border-slate-200 dark:border-zinc-800 shadow-2xl shadow-zinc-200/40 dark:shadow-none">
-          <div className="mb-8">
-            <h2 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+        <div className="w-full relative overflow-hidden bg-card/80 backdrop-blur-xl rounded-3xl border-2 border-border/50 shadow-2xl p-8 lg:p-10">
+          <div className="relative mb-8">
+            <h2 className="text-2xl lg:text-3xl font-bold tracking-tight text-foreground">
               Cadastrar
             </h2>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-sm text-muted-foreground mt-2">
               Cadastre sua conta para continuar.
             </p>
           </div>
@@ -127,22 +126,23 @@ export function SignUp() {
                 <div className="relative">
                   <User
                     className={`absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 transition-colors ${
-                      errors.name ? "text-red-500" : "text-muted-foreground"
+                      errors.name ? "text-destructive" : "text-muted-foreground"
                     }`}
                   />
                   <Input
                     {...register("name")}
                     placeholder="Nome"
-                    className={`pl-11 h-12 bg-slate-50/50 dark:bg-zinc-800/40 border-none ring-1 transition-all rounded-xl ${
-                      errors.email
-                        ? "ring-red-500/50 bg-red-50/30"
-                        : "ring-slate-200 dark:ring-zinc-700 focus-visible:ring-2 focus-visible:ring-primary"
+                    className={`pl-11 h-12 bg-muted/30 backdrop-blur-sm border-none ring-2 transition-all rounded-xl ${
+                      errors.name
+                        ? "ring-destructive/50 bg-destructive/5"
+                        : "ring-border/50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0"
                     }`}
                   />
                 </div>
-                {errors.email && (
-                  <p className="text-[11px] font-medium text-red-500 ml-1">
-                    {errors.email.message}
+                {errors.name && (
+                  <p className="text-xs font-medium text-destructive ml-4 flex items-center gap-1.5">
+                    <span className="w-1 h-1 rounded-full bg-destructive" />
+                    {errors.name.message}
                   </p>
                 )}
               </div>
@@ -151,21 +151,22 @@ export function SignUp() {
                 <div className="relative">
                   <Mail
                     className={`absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 transition-colors ${
-                      errors.email ? "text-red-500" : "text-muted-foreground"
+                      errors.email ? "text-destructive" : "text-muted-foreground"
                     }`}
                   />
                   <Input
                     {...register("email")}
                     placeholder="E-mail"
-                    className={`pl-11 h-12 bg-slate-50/50 dark:bg-zinc-800/40 border-none ring-1 transition-all rounded-xl ${
+                    className={`pl-11 h-12 bg-muted/30 backdrop-blur-sm border-none ring-2 transition-all rounded-xl ${
                       errors.email
-                        ? "ring-red-500/50 bg-red-50/30"
-                        : "ring-slate-200 dark:ring-zinc-700 focus-visible:ring-2 focus-visible:ring-primary"
+                        ? "ring-destructive/50 bg-destructive/5"
+                        : "ring-border/50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0"
                     }`}
                   />
                 </div>
                 {errors.email && (
-                  <p className="text-[11px] font-medium text-red-500 ml-1">
+                  <p className="text-xs font-medium text-destructive ml-4 flex items-center gap-1.5">
+                    <span className="w-1 h-1 rounded-full bg-destructive" />
                     {errors.email.message}
                   </p>
                 )}
@@ -175,53 +176,56 @@ export function SignUp() {
                 <div className="relative">
                   <Lock
                     className={`absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 transition-colors ${
-                      errors.password ? "text-red-500" : "text-muted-foreground"
+                      errors.password ? "text-destructive" : "text-muted-foreground"
                     }`}
                   />
                   <Input
                     {...register("password")}
                     type="password"
                     placeholder="Senha"
-                    className={`pl-11 h-12 bg-slate-50/50 dark:bg-zinc-800/40 border-none ring-1 transition-all rounded-xl ${
+                    className={`pl-11 h-12 bg-muted/30 backdrop-blur-sm border-none ring-2 transition-all rounded-xl ${
                       errors.password
-                        ? "ring-red-500/50 bg-red-50/30"
-                        : "ring-slate-200 dark:ring-zinc-700 focus-visible:ring-2 focus-visible:ring-primary"
+                        ? "ring-destructive/50 bg-destructive/5"
+                        : "ring-border/50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0"
                     }`}
                   />
                 </div>
                 {errors.password && (
-                  <p className="text-[11px] font-medium text-red-500 ml-1">
+                  <p className="text-xs font-medium text-destructive ml-4 flex items-center gap-1.5">
+                    <span className="w-1 h-1 rounded-full bg-destructive" />
                     {errors.password.message}
                   </p>
                 )}
               </div>
             </div>
 
-         
             {serverError && (
-              <div className="flex items-center gap-2 text-red-500 bg-red-500/5 border border-red-500/10 p-3 rounded-xl">
-                <XCircle size={16} />
-                <span className="text-xs font-semibold">{serverError}</span>
+              <div className="flex items-center gap-3 text-destructive bg-destructive/10 border-2 border-destructive/20 p-4 rounded-xl backdrop-blur-sm">
+                <XCircle size={18} />
+                <span className="text-sm font-semibold">{serverError}</span>
               </div>
             )}
 
             <div className="space-y-5 mt-2">
               <Button
                 disabled={isSubmitting}
-                className="w-full h-12 rounded-xl bg-zinc-900 dark:bg-primary text-white dark:text-primary-foreground hover:opacity-90 font-bold transition-all active:scale-95"
+                className="w-full h-12 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 font-bold transition-all shadow-lg hover:shadow-xl active:scale-95"
               >
                 {isSubmitting ? (
-                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                    Cadastrando...
+                  </>
                 ) : (
                   "Cadastrar"
                 )}
               </Button>
 
               <p className="text-center text-sm text-muted-foreground">
-                Ja tem uma conta?{" "}
+                Já tem uma conta?{" "}
                 <Link
                   to="/sign-in"
-                  className="font-bold text-zinc-900 dark:text-primary hover:underline underline-offset-4"
+                  className="font-bold text-primary hover:underline underline-offset-4 transition-colors"
                 >
                   Entre agora
                 </Link>

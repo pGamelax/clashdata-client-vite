@@ -1,10 +1,11 @@
-import { apiFetch } from "@/lib/api";
+import { apiFetch, ApiError } from "@/lib/api";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { ChartSpline, Sword, Swords, TrendingUp, Trophy } from "lucide-react";
 import { columns } from "./-columns";
 import { DataTable } from "./-data-table";
 import { useEffect } from "react";
+import { WarsLoading } from "./-loading";
 
 const clanStatsQueryOptions = (clanTag: string) =>
   queryOptions({
@@ -25,14 +26,59 @@ const clanWarsQueryOptions = (clanTag: string) =>
   });
 
 export const Route = createFileRoute("/(private)/wars/$clanTag")({
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      error: (search.error as string) || undefined,
+    };
+  },
   loader: async ({ context: { queryClient }, params }) => {
     try {
       await queryClient.ensureQueryData(clanStatsQueryOptions(params.clanTag));
       await queryClient.ensureQueryData(clanWarsQueryOptions(params.clanTag));
-    } catch (error) {
-      throw redirect({ to: "/sign-in" });
+    } catch (error: unknown) {
+      if (error instanceof ApiError) {
+        // 403: Clan não pertence ao usuário - redireciona para /clans com mensagem
+        if (error.status === 403) {
+          throw redirect({
+            to: "/clans",
+            search: {
+              error: "Acesso negado. Este clã não pertence ao seu usuário.",
+            },
+          });
+        }
+        // 401: Não autorizado - redireciona para login
+        if (error.status === 401) {
+          throw redirect({
+            to: "/sign-in",
+            search: {
+              error: "Sua sessão expirou. Faça login novamente.",
+            },
+          });
+        }
+        // 404: Clan não encontrado - redireciona para /clans com mensagem
+        if (error.status === 404) {
+          throw redirect({
+            to: "/clans",
+            search: {
+              error: "Clã não encontrado. Verifique a tag fornecida.",
+            },
+          });
+        }
+        // 400: Tag inválida - redireciona para /clans com mensagem
+        if (error.status === 400) {
+          throw redirect({
+            to: "/clans",
+            search: {
+              error: error.message || "Tag inválida. Verifique o formato da tag.",
+            },
+          });
+        }
+      }
+      // Re-lança o erro se não for um ApiError conhecido
+      throw error;
     }
   },
+  pendingComponent: () => <WarsLoading />,
 
   component: RouteComponent,
 });
@@ -74,67 +120,60 @@ function RouteComponent() {
   ];
 
   useEffect(() => {
-    document.title = "Wars | Clashdata";
+    document.title = `${clanStats.name} - Wars | Clashdata`;
   }, []);
 
   return (
-    <div className="min-h-screen  bg-[#f8fafc] dark:bg-zinc-950 p-4 lg:p-8 text-slate-900 dark:text-slate-100">
-      <div className=" container mx-auto space-y-8">
-        <header className="flex flex-col gap-1 px-1">
-          <div className="flex items-end gap-3">
-            <h1 className="text-2xl font-extrabold tracking-tight lg:text-4xl">
-              {clanStats.name}
-            </h1>
-            <p className="text-sm text-muted-foreground bg-white dark:bg-zinc-800 rounded-2xl px-2 border border-border/40">
-              {clanTag.replace("%23", "")}
+    <div className="min-h-screen bg-background">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 lg:py-8 space-y-4 sm:space-y-6">
+        {/* Header Card */}
+        <header className="bg-card border border-border rounded-xl p-5 sm:p-6 lg:p-8">
+          <div className="space-y-3 sm:space-y-4">
+            <div className="flex items-start sm:items-end gap-4 sm:gap-5 flex-wrap">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight text-foreground flex-1 min-w-0">
+                <span className="truncate block">{clanStats.name}</span>
+              </h1>
+              <p className="text-xs sm:text-sm text-muted-foreground bg-muted rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 border border-border font-mono whitespace-nowrap font-medium">
+                #{clanTag.replace("%23", "")}
+              </p>
+            </div>
+            <p className="text-sm sm:text-base text-muted-foreground max-w-2xl line-clamp-2 sm:line-clamp-none">
+              {clanStats.description}
             </p>
           </div>
-          <p className="text-muted-foreground font-medium max-w-2xl">
-            {clanStats.description}
-          </p>
         </header>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {stats.map((stat, i) => {
             const Icon = stat.icon;
             return (
               <div
                 key={i}
-                className="group relative flex flex-row justify-between md:flex-col bg-white dark:bg-zinc-900/50 rounded-3xl border border-border/50 shadow-sm p-6 hover:shadow-lg transition-all"
+                className="bg-card border border-border rounded-xl p-4 sm:p-5"
               >
-                <div className="flex flex-col space-y-2 justify-between">
-                  <div
-                    className={`p-2 w-fit rounded-lg bg-white dark:bg-zinc-800 shadow-sm ${stat.color}`}
-                  >
-                    <Icon size={20} />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">
-                      {stat.label}
-                    </p>
-                  </div>
+                <div className={`mb-3 ${stat.color}`}>
+                  <Icon size={20} className="sm:w-6 sm:h-6" />
                 </div>
-                <div className="mt-4">
-                  <p className="text-3xl font-bold tracking-tight mt-1">
-                    {stat.value}
-                  </p>
-                </div>
+                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-1.5">
+                  {stat.label}
+                </p>
+                <p className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-foreground">
+                  {stat.value}
+                </p>
               </div>
             );
           })}
         </div>
 
-        <div className="space-y-4">
-          <div className="flex items-center gap-3 px-1">
-            <div className="bg-primary/10 text-primary p-2 rounded-xl">
-              <ChartSpline size={20} />
-            </div>
-            <h2 className="text-2xl font-bold tracking-tight">
-              Performance Detalhada
-            </h2>
-          </div>
+        {/* Performance Section */}
+        <div className="space-y-3 sm:space-y-4">
+          <h2 className="text-lg sm:text-xl font-semibold tracking-tight flex items-center gap-2">
+            <ChartSpline className="w-5 h-5 text-primary" />
+            Performance Detalhada
+          </h2>
 
-          <div className="relative flex flex-col bg-white dark:bg-zinc-900/50 rounded-3xl border border-border/50 shadow-sm p-6">
+          <div className="bg-card border border-border rounded-xl p-4 sm:p-5 lg:p-6">
             <DataTable columns={columns} data={clanWars.players} />
           </div>
         </div>
