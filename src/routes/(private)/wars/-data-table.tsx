@@ -393,24 +393,24 @@ export function DataTable({ columns, data }: DataTableProps) {
           <span className="font-bold text-foreground">{table.getPageCount()}</span>
         </p>
         <div className="flex gap-3">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
             className="rounded-xl border-2 shadow-md hover:shadow-lg transition-all"
-          >
-            Anterior
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+        >
+          Anterior
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
             className="rounded-xl border-2 shadow-md hover:shadow-lg transition-all"
-          >
-            Próximo
-          </Button>
+        >
+          Próximo
+        </Button>
         </div>
       </div>
     </div>

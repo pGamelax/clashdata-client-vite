@@ -10,10 +10,12 @@ import { LegendLogsLoading } from "./-loading";
 const pushQueryOptions = (clanTag: string) =>
   queryOptions({
     queryKey: ["push", clanTag],
-    queryFn: () =>
-      apiFetch(
-        `${import.meta.env.VITE_API_URL}/legend-logs/clan?clanTag=${encodeURIComponent(`#` + clanTag)}`,
-      ),
+    queryFn: () => {
+      const cleanTag = clanTag.replace(/#|%23/g, "").trim();
+      return apiFetch(
+        `${import.meta.env.VITE_API_URL}/legend-logs/clan?clanTag=${cleanTag}`,
+      );
+    },
   });
 
 export const Route = createFileRoute("/(private)/push/$clanTag")({

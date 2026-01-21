@@ -10,19 +10,23 @@ import { WarsLoading } from "./-loading";
 const clanStatsQueryOptions = (clanTag: string) =>
   queryOptions({
     queryKey: ["clan-stats", clanTag],
-    queryFn: () =>
-      apiFetch(
-        `${import.meta.env.VITE_API_URL}/clans/clan-info?clanTag=${encodeURIComponent("#" + clanTag)}`,
-      ),
+    queryFn: () => {
+      const cleanTag = clanTag.replace(/#|%23/g, "").trim();
+      return apiFetch(
+        `${import.meta.env.VITE_API_URL}/clans/clan-info?clanTag=${cleanTag}`,
+      );
+    },
   });
 
 const clanWarsQueryOptions = (clanTag: string) =>
   queryOptions({
     queryKey: ["clan-wars", clanTag],
-    queryFn: () =>
-      apiFetch(
-        `${import.meta.env.VITE_API_URL}/dashboard/data?clanTag=${encodeURIComponent("#" + clanTag)}`,
-      ),
+    queryFn: () => {
+      const cleanTag = clanTag.replace(/#|%23/g, "").trim();
+      return apiFetch(
+        `${import.meta.env.VITE_API_URL}/dashboard/data?clanTag=${cleanTag}`,
+      );
+    },
   });
 
 export const Route = createFileRoute("/(private)/wars/$clanTag")({
@@ -132,7 +136,7 @@ function RouteComponent() {
             <div className="flex items-start sm:items-end gap-4 sm:gap-5 flex-wrap">
               <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight text-foreground flex-1 min-w-0">
                 <span className="truncate block">{clanStats.name}</span>
-              </h1>
+            </h1>
               <p className="text-xs sm:text-sm text-muted-foreground bg-muted rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 border border-border font-mono whitespace-nowrap font-medium">
                 #{clanTag.replace("%23", "")}
               </p>
@@ -159,8 +163,8 @@ function RouteComponent() {
                   {stat.label}
                 </p>
                 <p className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-foreground">
-                  {stat.value}
-                </p>
+                    {stat.value}
+                  </p>
               </div>
             );
           })}
@@ -170,8 +174,8 @@ function RouteComponent() {
         <div className="space-y-3 sm:space-y-4">
           <h2 className="text-lg sm:text-xl font-semibold tracking-tight flex items-center gap-2">
             <ChartSpline className="w-5 h-5 text-primary" />
-            Performance Detalhada
-          </h2>
+              Performance Detalhada
+            </h2>
 
           <div className="bg-card border border-border rounded-xl p-4 sm:p-5 lg:p-6">
             <DataTable columns={columns} data={clanWars.players} />

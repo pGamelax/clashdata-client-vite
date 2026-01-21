@@ -12,9 +12,9 @@ const searchPlayerQueryOptions = (playerTag: string) =>
     queryKey: ["search-player", playerTag],
     queryFn: async () => {
       if (!playerTag || playerTag.trim() === "") return null;
-      const tag = playerTag.startsWith("#") ? playerTag : `#${playerTag}`;
+      const cleanTag = playerTag.replace(/#|%23/g, "").trim();
       return await apiFetch(
-        `${import.meta.env.VITE_API_URL}/players/${encodeURIComponent(tag)}`,
+        `${import.meta.env.VITE_API_URL}/players?playerTag=${cleanTag}`,
       );
     },
   });

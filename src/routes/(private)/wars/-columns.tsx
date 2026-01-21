@@ -58,12 +58,12 @@ export const columns: ColumnDef<ProcessedPlayer>[] = [
           search={{ error: undefined }}
           className="flex flex-col text-base hover:text-primary transition-colors cursor-pointer"
         >
-          <span className="font-semibold tracking-tight">
-            {row.original.name}
-          </span>
-          <span className=" text-muted-foreground font-mono">
-            {row.original.tag}
-          </span>
+        <span className="font-semibold tracking-tight">
+          {row.original.name}
+        </span>
+        <span className=" text-muted-foreground font-mono">
+          {row.original.tag}
+        </span>
         </Link>
       );
     },

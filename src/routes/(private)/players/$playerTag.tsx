@@ -17,8 +17,9 @@ const playerInfoQueryOptions = (playerTag: string) =>
   queryOptions({
     queryKey: ["player-info", playerTag],
     queryFn: async () => {
+      const cleanTag = playerTag.replace(/#|%23/g, "").trim();
       const response = await apiFetch(
-        `${import.meta.env.VITE_API_URL}/players/info?playerTag=${encodeURIComponent("#" + playerTag)}`,
+        `${import.meta.env.VITE_API_URL}/players/info?playerTag=${cleanTag}`,
       );
       return response as PlayerInfo;
     },
@@ -27,23 +28,22 @@ const playerInfoQueryOptions = (playerTag: string) =>
 const playerWarHistoryQueryOptions = (playerTag: string) =>
   queryOptions({
     queryKey: ["player-war-history", playerTag],
-    queryFn: async () =>
-      apiFetch(
-        `${import.meta.env.VITE_API_URL}/players/war-history?playerTag=${encodeURIComponent("#" + playerTag)}`,
-      ),
+    queryFn: async () => {
+      const cleanTag = playerTag.replace(/#|%23/g, "").trim();
+      return apiFetch(
+        `${import.meta.env.VITE_API_URL}/players/war-history?playerTag=${cleanTag}`,
+      );
+    },
   });
 
 const playerPushLogsQueryOptions = (playerTag: string) =>
   queryOptions({
     queryKey: ["player-push-logs", playerTag],
     queryFn: async () => {
-      // Remover # se existir - o backend adiciona internamente
-      const cleanTag = playerTag.replace("#", "").trim();
+      const cleanTag = playerTag.replace(/#|%23/g, "").trim();
       return apiFetch(
-        `${import.meta.env.VITE_API_URL}/legend-logs/player?playerTag=${encodeURIComponent(cleanTag)}`,
+        `${import.meta.env.VITE_API_URL}/legend-logs/player?playerTag=${cleanTag}`,
       );
-
-      
     },
   });
 

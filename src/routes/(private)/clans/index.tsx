@@ -115,7 +115,7 @@ function RouteComponent() {
                   <div className="flex items-center justify-end gap-1.5 text-xs sm:text-sm font-medium text-primary pt-2 border-t border-border">
                     <span>Dashboard</span>
                     <ChevronRight size={14} className="sm:w-4 sm:h-4" />
-                  </div>
+                </div>
                 </div>
               </div>
             ))}

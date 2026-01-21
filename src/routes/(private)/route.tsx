@@ -31,7 +31,7 @@ export const Route = createFileRoute("/(private)")({
               error: "Sua sessão expirou. Faça login novamente.",
             },
           });
-        }
+      }
       }
       // Re-lança o erro se não for um ApiError 401
       throw error;

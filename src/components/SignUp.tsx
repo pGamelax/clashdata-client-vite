@@ -198,7 +198,7 @@ export function SignUp() {
                 )}
               </div>
             </div>
-
+         
             {serverError && (
               <div className="flex items-center gap-3 text-destructive bg-destructive/10 border-2 border-destructive/20 p-4 rounded-xl backdrop-blur-sm">
                 <XCircle size={18} />

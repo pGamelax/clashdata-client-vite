@@ -70,8 +70,8 @@ export function WarHistorySection({ rawData, playerClanTag }: WarHistorySectionP
       <Tabs defaultValue="normal" className="w-full">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-4">
           <h2 className="text-lg sm:text-xl font-semibold tracking-tight">
-            Histórico de Batalhas
-          </h2>
+              Histórico de Batalhas
+            </h2>
           <TabsList className="bg-muted border border-border rounded-lg p-1">
             <TabsTrigger 
               value="normal" 
@@ -128,12 +128,12 @@ function DataTable<TData extends ClanWar>({
     <div className="space-y-4">
       {/* Cards instead of table */}
       <div className="space-y-3">
-        {table.getRowModel().rows?.length ? (
-          table.getRowModel().rows.map((row) => (
-            <React.Fragment key={row.id}>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <React.Fragment key={row.id}>
               {/* War Card */}
               <div
-                onClick={() => toggleRow(row.id)}
+                    onClick={() => toggleRow(row.id)}
                 className="bg-card border border-border rounded-xl p-4 sm:p-5 cursor-pointer hover:bg-muted/50 transition-colors"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
@@ -171,19 +171,19 @@ function DataTable<TData extends ClanWar>({
               </div>
 
               {/* Expanded Attacks */}
-              {expandedRows[row.id] && (
+                  {expandedRows[row.id] && (
                 <div className="ml-4 sm:ml-6 mt-2 space-y-2">
-                  {row.original.rawAttacks.length > 0 ? (
-                    row.original.rawAttacks.map((att, idx) => (
-                      <div
-                        key={idx}
+                          {row.original.rawAttacks.length > 0 ? (
+                            row.original.rawAttacks.map((att, idx) => (
+                              <div
+                                key={idx}
                         className="bg-muted/30 border border-border rounded-lg p-3 sm:p-4"
-                      >
+                              >
                         <div className="flex items-center justify-between gap-4 flex-wrap">
                           <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center font-semibold text-sm text-primary border border-primary/20">
-                              {idx + 1}º
-                            </div>
+                                  {idx + 1}º
+                                </div>
                             <div className="flex items-center gap-1.5 px-3 py-1 bg-muted rounded-lg border border-border">
                               <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
                               <span className="font-semibold text-sm text-foreground">{att.stars}</span>
@@ -192,28 +192,28 @@ function DataTable<TData extends ClanWar>({
                               <Bomb className="w-3.5 h-3.5 fill-green-500 text-green-500" />
                               <span className="font-semibold text-sm text-foreground">{att.destructionPercentage}%</span>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
+                                </div>
+                                </div>
+                              </div>
+                            ))
+                          ) : (
                     <div className="bg-muted/30 border border-border rounded-lg p-4 text-center">
                       <p className="text-sm text-muted-foreground">
-                        Nenhum ataque registrado.
-                      </p>
-                    </div>
+                              Nenhum ataque registrado.
+                            </p>
+                        </div>
                   )}
                 </div>
-              )}
-            </React.Fragment>
-          ))
-        ) : (
+                  )}
+                </React.Fragment>
+              ))
+            ) : (
           <div className="bg-card border border-border rounded-xl p-12 text-center">
             <p className="text-muted-foreground">
-              Nenhuma guerra registrada.
+                  Nenhuma guerra registrada.
             </p>
           </div>
-        )}
+            )}
       </div>
 
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4">
