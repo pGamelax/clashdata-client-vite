@@ -20,38 +20,19 @@ COPY . .
 RUN if [ -f pnpm-lock.yaml ]; then pnpm run build; \
     else npm run build; fi
 
-# Stage 2: Production
-FROM nginx:alpine
+# Stage 2: Production - Usar serve para servir arquivos estáticos
+FROM node:20-alpine
 
-# Copiar arquivos de build para nginx
-COPY --from=builder /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-# Copiar configuração customizada do nginx (se necessário)
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Instalar serve globalmente
+RUN npm install -g serve@14.2.1
 
-# Adicionar arquivo de configuração nginx para SPA
-RUN echo 'server { \
-    listen 80; \
-    server_name _; \
-    root /usr/share/nginx/html; \
-    index index.html; \
-    \
-    location / { \
-        try_files $uri $uri/ /index.html; \
-    } \
-    \
-    location /_health { \
-        access_log off; \
-        return 200 "healthy\n"; \
-        add_header Content-Type text/plain; \
-    } \
-    \
-    gzip on; \
-    gzip_vary on; \
-    gzip_min_length 1024; \
-    gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml+rss application/json application/javascript; \
-}' > /etc/nginx/conf.d/default.conf
+# Copiar arquivos de build
+COPY --from=builder /app/dist ./dist
 
-EXPOSE 80
+# Expor porta 3000 (Traefik/Caddy fará o proxy reverso)
+EXPOSE 3000
 
-CMD ["nginx", "-g", "daemon off;"]
+# Servir arquivos estáticos na porta 3000 com suporte a SPA (--single)
+CMD ["serve", "-s", "dist", "-l", "3000"]
