@@ -59,6 +59,7 @@ export const apiFetch = async (endpoint: string) => {
       endpoint,
     );
   }
+  const resp = await res.json()
 
-  return res.json();
+  return resp;
 };
