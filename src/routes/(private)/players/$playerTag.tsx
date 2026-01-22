@@ -19,7 +19,7 @@ const playerInfoQueryOptions = (playerTag: string) =>
     queryFn: async () => {
       const cleanTag = playerTag.replace(/#|%23/g, "").trim();
       const response = await apiFetch(
-        `${import.meta.env.VITE_API_URL}  ${cleanTag}`,
+        `${import.meta.env.VITE_API_URL}/players/info?playerTag=${cleanTag}`,
       );
       return response as PlayerInfo;
     },
