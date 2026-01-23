@@ -46,7 +46,7 @@ function RouteComponent() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Header user={user.user} userClans={clans} />
+      <Header user={{ ...user.user, role: user.user?.role }} userClans={clans} />
       <main className="grow">
         <Outlet />
       </main>

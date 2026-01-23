@@ -1,11 +1,12 @@
-import { apiFetch, ApiError } from "@/lib/api";
+import { apiFetch } from "@/lib/api";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { BarChart3, Shield } from "lucide-react";
 import { columns } from "./-columns";
 import { DataTable } from "./-data-table";
 import { LegendLogsLoading } from "./-loading";
+import { handleClanErrorWithRedirect } from "@/lib/clan-error-handler";
 
 const pushQueryOptions = (clanTag: string) =>
   queryOptions({
@@ -28,45 +29,7 @@ export const Route = createFileRoute("/(private)/push/$clanTag")({
     try {
       await queryClient.ensureQueryData(pushQueryOptions(params.clanTag));
     } catch (error: unknown) {
-      if (error instanceof ApiError) {
-        // 403: Clan não pertence ao usuário - redireciona para /clans com mensagem
-        if (error.status === 403) {
-          throw redirect({
-            to: "/clans",
-            search: {
-              error: "Acesso negado. Este clã não pertence ao seu usuário.",
-            },
-          });
-        }
-        // 401: Não autorizado - redireciona para login
-        if (error.status === 401) {
-          throw redirect({
-            to: "/sign-in",
-            search: {
-              error: "Sua sessão expirou. Faça login novamente.",
-            },
-          });
-        }
-        // 404: Clan não encontrado
-        if (error.status === 404) {
-          throw redirect({
-            to: "/clans",
-            search: {
-              error: "Clã não encontrado. Verifique a tag fornecida.",
-            },
-          });
-        }
-        // 400: Tag inválida
-        if (error.status === 400) {
-          throw redirect({
-            to: "/clans",
-            search: {
-              error: error.message || "Tag inválida. Verifique o formato da tag.",
-            },
-          });
-        }
-      }
-      throw error;
+      handleClanErrorWithRedirect(error, params.clanTag);
     }
   },
   component: RouteComponent,

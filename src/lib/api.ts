@@ -9,9 +9,13 @@ export class ApiError extends Error {
   }
 }
 
-export const apiFetch = async (endpoint: string) => {
+export const apiFetch = async (
+  endpoint: string,
+  options?: RequestInit,
+) => {
   const res = await fetch(endpoint, {
     credentials: "include",
+    ...options,
   });
 
   // Tenta obter mensagem de erro do response se disponível

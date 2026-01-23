@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import type { ProcessedPlayer } from "./-types"
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 
 const SortButton = ({ column, label }: { column: any; label: string }) => {
@@ -74,14 +73,17 @@ export const columns: ColumnDef<ProcessedPlayer>[] = [
     cell: ({ row }) => {
       const score = row.original.performanceScore;
       const progress = (score / 3) * 100;
+
+ 
       return (
         <div className="flex flex-col w-32 gap-1 text-base">
           <div className="flex justify-between items-center">
             <span className=" font-semibold text-primary">
               {score.toFixed(2)} pts
             </span>
-            <span className="text-sm text-muted-foreground uppercase">
-              {row.original.attackCount} atq
+          
+            <span className="uppercase text-muted-foreground text-base">
+              {row.original.totalPts} PT
             </span>
           </div>
           <div className="h-1.5 w-full bg-slate-100 dark:bg-zinc-800 rounded-full overflow-hidden">
@@ -135,30 +137,20 @@ export const columns: ColumnDef<ProcessedPlayer>[] = [
       const attacks = row.original.attackCount;
 
       const maxPossibleAttacks = wars * 2;
-      const participationRate =
-        maxPossibleAttacks > 0
-          ? Math.min((attacks / maxPossibleAttacks) * 100, 100)
-          : 0;
 
       return (
         <div className="flex flex-col text-base min-w-25">
           <div className="flex items-center gap-2">
             <SwordsIcon size={12} className="text-green-500 fill-green-500" />
-            <span className="uppercase font-semibold">
-              {attacks}/{maxPossibleAttacks}
+            <span className="font-semibold">
+             {row.original.warCount} Guerras
             </span>
-            <span
-              className={cn(
-                "px-1.5 py-0.5 rounded-md bg-secondary text-muted-foreground font-semibold",
-                participationRate < 50 && "text-destructive bg-destructive/10",
-              )}
-            >
-              {participationRate.toFixed(0)}%
-            </span>
+         
           </div>
           <div>
-            <span className="text-muted-foreground text-base">
-              {row.original.totalPts} pts
+         
+          <span className="uppercase font-semibold text-sm text-muted-foreground">
+              {attacks}/{maxPossibleAttacks} Atq
             </span>
           </div>
         </div>

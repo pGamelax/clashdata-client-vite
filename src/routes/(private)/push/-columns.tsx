@@ -21,8 +21,8 @@ export interface PlayerDayLog {
 }
 
 // Função para formatar número com superscript
-const formatWithSuperscript = (value: number, count: number): string => {
-  const sign = value >= 0 ? "+" : "";
+const formatWithSuperscript = (type: string, value: number, count: number): string => {
+  const sign = type === "GAIN" ? "+" : "-";
   const superscript = count.toString();
   const superscriptMap: Record<string, string> = {
     "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", 
@@ -58,7 +58,7 @@ export const columns: ColumnDef<PlayerDayLog>[] = [
       const count = row.original.gainCount;
       return (
         <span className="font-semibold text-green-500">
-          {formatWithSuperscript(gain, count)}
+          {formatWithSuperscript("GAIN", gain, count)}
         </span>
       );
     },
@@ -71,7 +71,7 @@ export const columns: ColumnDef<PlayerDayLog>[] = [
       const count = row.original.lossCount;
       return (
         <span className="font-semibold text-red-500">
-          {formatWithSuperscript(loss, count)}
+          {formatWithSuperscript("LOSS", loss, count)}
         </span>
       );
     },

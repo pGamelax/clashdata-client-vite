@@ -17,6 +17,7 @@ import { Route as publicSignUpIndexRouteImport } from './routes/(public)/sign-up
 import { Route as publicSignInIndexRouteImport } from './routes/(public)/sign-in/index'
 import { Route as privatePlayersIndexRouteImport } from './routes/(private)/players/index'
 import { Route as privateClansIndexRouteImport } from './routes/(private)/clans/index'
+import { Route as privateAdminIndexRouteImport } from './routes/(private)/admin/index'
 import { Route as privateWarsClanTagRouteImport } from './routes/(private)/wars/$clanTag'
 import { Route as privatePushClanTagRouteImport } from './routes/(private)/push/$clanTag'
 import { Route as privatePlayersPlayerTagRouteImport } from './routes/(private)/players/$playerTag'
@@ -59,6 +60,11 @@ const privateClansIndexRoute = privateClansIndexRouteImport.update({
   path: '/clans/',
   getParentRoute: () => privateRouteRoute,
 } as any)
+const privateAdminIndexRoute = privateAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => privateRouteRoute,
+} as any)
 const privateWarsClanTagRoute = privateWarsClanTagRouteImport.update({
   id: '/wars/$clanTag',
   path: '/wars/$clanTag',
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/players/$playerTag': typeof privatePlayersPlayerTagRoute
   '/push/$clanTag': typeof privatePushClanTagRoute
   '/wars/$clanTag': typeof privateWarsClanTagRoute
+  '/admin': typeof privateAdminIndexRoute
   '/clans': typeof privateClansIndexRoute
   '/players/': typeof privatePlayersIndexRoute
   '/sign-in': typeof publicSignInIndexRoute
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
   '/players/$playerTag': typeof privatePlayersPlayerTagRoute
   '/push/$clanTag': typeof privatePushClanTagRoute
   '/wars/$clanTag': typeof privateWarsClanTagRoute
+  '/admin': typeof privateAdminIndexRoute
   '/clans': typeof privateClansIndexRoute
   '/players': typeof privatePlayersIndexRoute
   '/sign-in': typeof publicSignInIndexRoute
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   '/(private)/players/$playerTag': typeof privatePlayersPlayerTagRoute
   '/(private)/push/$clanTag': typeof privatePushClanTagRoute
   '/(private)/wars/$clanTag': typeof privateWarsClanTagRoute
+  '/(private)/admin/': typeof privateAdminIndexRoute
   '/(private)/clans/': typeof privateClansIndexRoute
   '/(private)/players/': typeof privatePlayersIndexRoute
   '/(public)/sign-in/': typeof publicSignInIndexRoute
@@ -118,6 +127,7 @@ export interface FileRouteTypes {
     | '/players/$playerTag'
     | '/push/$clanTag'
     | '/wars/$clanTag'
+    | '/admin'
     | '/clans'
     | '/players/'
     | '/sign-in'
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/players/$playerTag'
     | '/push/$clanTag'
     | '/wars/$clanTag'
+    | '/admin'
     | '/clans'
     | '/players'
     | '/sign-in'
@@ -141,6 +152,7 @@ export interface FileRouteTypes {
     | '/(private)/players/$playerTag'
     | '/(private)/push/$clanTag'
     | '/(private)/wars/$clanTag'
+    | '/(private)/admin/'
     | '/(private)/clans/'
     | '/(private)/players/'
     | '/(public)/sign-in/'
@@ -212,6 +224,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof privateClansIndexRouteImport
       parentRoute: typeof privateRouteRoute
     }
+    '/(private)/admin/': {
+      id: '/(private)/admin/'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof privateAdminIndexRouteImport
+      parentRoute: typeof privateRouteRoute
+    }
     '/(private)/wars/$clanTag': {
       id: '/(private)/wars/$clanTag'
       path: '/wars/$clanTag'
@@ -265,6 +284,7 @@ interface privateRouteRouteChildren {
   privatePlayersRouteRoute: typeof privatePlayersRouteRouteWithChildren
   privatePushClanTagRoute: typeof privatePushClanTagRoute
   privateWarsClanTagRoute: typeof privateWarsClanTagRoute
+  privateAdminIndexRoute: typeof privateAdminIndexRoute
   privateClansIndexRoute: typeof privateClansIndexRoute
 }
 
@@ -272,6 +292,7 @@ const privateRouteRouteChildren: privateRouteRouteChildren = {
   privatePlayersRouteRoute: privatePlayersRouteRouteWithChildren,
   privatePushClanTagRoute: privatePushClanTagRoute,
   privateWarsClanTagRoute: privateWarsClanTagRoute,
+  privateAdminIndexRoute: privateAdminIndexRoute,
   privateClansIndexRoute: privateClansIndexRoute,
 }
 

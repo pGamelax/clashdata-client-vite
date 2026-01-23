@@ -191,6 +191,8 @@ export function DataTable({ columns, data }: DataTableProps) {
                 <SelectItem value="10">Últimas 10</SelectItem>
                 <SelectItem value="15">Últimas 15</SelectItem>
                 <SelectItem value="20">Últimas 20</SelectItem>
+                <SelectItem value="30">Últimas 30</SelectItem>
+                <SelectItem value="40">Últimas 40</SelectItem>
               </SelectContent>
             </Select>
           </div>

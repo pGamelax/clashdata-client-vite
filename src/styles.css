@@ -150,6 +150,36 @@ code {
     scroll-behavior: smooth;
   }
   
+  /* Cursor pointer para elementos clicáveis */
+  a,
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  [role="link"],
+  [role="menuitem"],
+  [role="tab"],
+  input[type="checkbox"],
+  input[type="radio"],
+  label,
+  select:not(:disabled),
+  [data-slot="button"],
+  [data-slot="dialog-trigger"],
+  [data-slot="select-trigger"]:not(:disabled),
+  [data-slot="dropdown-menu-trigger"]:not(:disabled),
+  [data-slot="navigation-menu-trigger"]:not(:disabled),
+  [data-slot="popover-trigger"]:not(:disabled),
+  [data-slot="accordion-trigger"]:not(:disabled),
+  [data-slot="sheet-trigger"]:not(:disabled) {
+    @apply cursor-pointer;
+  }
+  
+  /* Cursor not-allowed para elementos desabilitados */
+  button:disabled,
+  [role="button"]:disabled,
+  select:disabled,
+  [data-slot="button"]:disabled {
+    @apply cursor-not-allowed;
+  }
+  
   /* Modern scrollbar */
   ::-webkit-scrollbar {
     width: 10px;
@@ -161,7 +191,7 @@ code {
   }
   
   ::-webkit-scrollbar-thumb {
-    @apply bg-muted-foreground/30 rounded-full;
+    @apply bg-muted-foreground/30 rounded-full cursor-pointer;
   }
   
   ::-webkit-scrollbar-thumb:hover {

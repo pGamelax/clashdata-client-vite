@@ -36,7 +36,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
-import { LogOut, Menu, LayoutDashboard, Shield, Users, BarChart3 } from "lucide-react";
+import { LogOut, Menu, LayoutDashboard, Shield, Users, BarChart3, Settings } from "lucide-react";
 import { Link, useRouter } from "@tanstack/react-router";
 
 interface HeaderProps {
@@ -44,6 +44,7 @@ interface HeaderProps {
     name?: string | null;
     image?: string | null;
     email?: string | null;
+    role?: string | null;
   };
   userClans: {
     name: string;
@@ -240,6 +241,17 @@ export function Header({ user, userClans }: HeaderProps) {
                       </p>
                     </div>
                   </DropdownMenuLabel>
+                  {user.role === "admin" && (
+                    <DropdownMenuItem asChild>
+                      <Link
+                        to="/admin"
+                        className="cursor-pointer rounded-lg mx-1 my-1 focus:bg-accent focus:text-accent-foreground"
+                      >
+                        <Settings className="mr-2 h-4 w-4" />
+                        Painel Admin
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem
                     className="text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer rounded-lg mx-1 my-1"
                     onClick={handleSignOut}
