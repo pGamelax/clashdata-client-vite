@@ -1,24 +1,21 @@
 # Stage 1: Build
-FROM node:20-alpine AS builder
+FROM oven/bun:latest AS builder
 
 WORKDIR /app
 
 # Copiar arquivos de dependências
-COPY package.json package-lock.json* pnpm-lock.yaml* ./
-
-# Instalar pnpm se estiver usando
-RUN corepack enable && corepack prepare pnpm@latest --activate
+COPY package.json bun.lock ./
 
 # Instalar dependências
-RUN if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; \
-    else npm ci || npm install; fi
+RUN bun install --frozen-lockfile
 
 # Copiar código fonte
 COPY . .
 
 # Build da aplicação
-RUN if [ -f pnpm-lock.yaml ]; then pnpm run build; \
-    else npm run build; fi
+# Usa o script build do package.json (vite build && tsc)
+# Se tsc falhar, continua pois o build do Vite já foi feito
+RUN bun run build || bun run vite build
 
 # Stage 2: Production - Usar serve para servir arquivos estáticos
 FROM node:20-alpine

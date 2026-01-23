@@ -114,13 +114,6 @@ export function handleClanError(
 
   // 404: Clã não encontrado ou não registrado
   if (status === 404) {
-    // Verifica se a mensagem indica que o clã não está registrado
-    const isNotRegistered =
-      message?.toLowerCase().includes("não registrado") ||
-      message?.toLowerCase().includes("not registered") ||
-      message?.toLowerCase().includes("não cadastrado") ||
-      message?.toLowerCase().includes("not found");
-
     return {
       type: ClanErrorType.NOT_FOUND,
       message:
@@ -162,7 +155,7 @@ export function handleClanErrorWithRedirect(
   const errorInfo = handleClanError(error, clanTag);
   throw redirect({
     to: errorInfo.redirectTo as any,
-    search: errorInfo.redirectSearch,
+    search: errorInfo.redirectSearch as any,
   });
 }
 
